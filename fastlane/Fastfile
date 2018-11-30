@@ -1,0 +1,32 @@
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  slack_url = "<INSERT_YOUR_SLACK_WEBHOOK>"
+
+  desc "Do UI Tests on CircleCI"
+  lane :ui_test do
+    # Run all Tests
+    sh('cd .. && ./gradlew app:connectedAndroidTest')
+    # Run spesific Tests
+    # sh('cd .. && ./gradlew app:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=<INSERT_YOUR_TEST_PACKAGE_HERE(com.app.myapp.emulatortests)>')
+
+# Uncomment below lines if you want to send slack message when tests pass
+#    slack(message: "Build & Test Completed",
+#  			slack_url: slack_url,
+#  			default_payloads: [:git_branch, :git_author, :last_git_commit_message])
+  end
+
+# Uncomment below lines if you want to send a slack message in case of error
+  # ERROR
+#  error do |lane, exception|
+#    slack(
+#			message: "Test Failed",
+#			success: false,
+#			slack_url: slack_url,
+#			default_payloads: [:git_branch, :git_author, :last_git_commit_message]
+#		)
+#	end
+end
