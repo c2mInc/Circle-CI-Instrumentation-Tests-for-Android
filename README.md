@@ -38,6 +38,31 @@ In order to run tests we need an active Android device emulator and we can set i
     name: Install emulator
     command: (yes | sdkmanager "platform-tools" "platforms;android-26" "extras;intel;Hardware_Accelerated_Execution_Manager" "build tools;26.0.0" "system-images;android-26;default;x86" "emulator" --verbose) || true
 ```
+### Starting the Emulator and Running Tests
+```
+- run: avdmanager create avd -n Nexus_5X_API_26_x86 -k "system-images;android-26;default;x86" -d "Nexus 5X"
+      - run: osascript ./fastlane/recording_related/dismiss_warning.scpt # Dismisses the same named computer error
+      - run:
+          name: Run emulator in background
+          command: /usr/local/share/android-sdk/tools/emulator @Nexus_5X_API_26_x86 -skin 1080x2066 -memory 2048 -noaudio
+          background: true
+- run:
+      name: Run Tests
+      command: bundle exec fastlane ui_test
+      no_output_timeout: 30m
+```
+
+The `bundle exec fastlane ui_test` command starts the relevant fastlane lane.
+## Running Tests from Fastlane
+```
+desc "Do UI Tests on CircleCI"
+  lane :ui_test do
+    # Run all Tests
+    sh('cd .. && ./gradlew app:connectedAndroidTest')
+    # Run spesific Tests
+    # sh('cd .. && ./gradlew app:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=<INSERT_YOUR_TEST_PACKAGE_HERE(com.app.myapp.emulatortests)>')
+end
+```
 
 ## Author
 
