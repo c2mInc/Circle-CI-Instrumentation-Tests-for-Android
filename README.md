@@ -16,7 +16,7 @@ The commit triggers the `ui_test` job on CircleCI, the job first set up the Andr
 In order to run tests we need an active Android device emulator and we can set it up from `.circleci/config.yml` file. We need to execute the following prompts in our CircleCI job which is named `ui_test` in the example.
 
 ### Setting Environment Variables
-```
+```yml
 - run:
     name: Setup environment variables
     command: |
@@ -28,7 +28,7 @@ In order to run tests we need an active Android device emulator and we can set i
       echo 'export JAVA_HOME=/Library/Java/Home' >> $BASH_ENV
 ```
 ### Installing the SDK and the Emulator
-```
+```yml
 - run:
     name: Install Android sdk
     command: |
@@ -39,7 +39,7 @@ In order to run tests we need an active Android device emulator and we can set i
     command: (yes | sdkmanager "platform-tools" "platforms;android-26" "extras;intel;Hardware_Accelerated_Execution_Manager" "build tools;26.0.0" "system-images;android-26;default;x86" "emulator" --verbose) || true
 ```
 ### Starting the Emulator and Running Tests
-```
+```yml
 - run: avdmanager create avd -n Nexus_5X_API_26_x86 -k "system-images;android-26;default;x86" -d "Nexus 5X"
       - run: osascript ./fastlane/recording_related/dismiss_warning.scpt # Dismisses the same named computer error
       - run:
@@ -54,9 +54,9 @@ In order to run tests we need an active Android device emulator and we can set i
 
 The `bundle exec fastlane ui_test` command starts the relevant fastlane lane.
 ## Running Tests from Fastlane
-```
+```ruby
 desc "Do UI Tests on CircleCI"
-  lane :ui_test do
+lane :ui_test do
     # Run all Tests
     sh('cd .. && ./gradlew app:connectedAndroidTest')
     # Run spesific Tests
